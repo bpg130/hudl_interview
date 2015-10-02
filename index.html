@@ -20,21 +20,51 @@
     <script>
 	var map;
 	var markers = [];
-	function initMarkers(){
-		var Latlng = {lat: 38.9805051, lng: -77.1265962};
-		var marker = new google.maps.Marker({
-		position: Latlng,
-		map: map,
-		title: 'Walt Whitman High School'
-		});
+	
 
-		var infowindow = new google.maps.InfoWindow({
-    		content: "secretMessage"
-  		});
-  		marker.addListener('click', function() {
-    		infowindow.open(marker.get('map'), marker);
-  		});
+  function initMarkers(){
+
+    var marks = [
+    [38.9805051, -77.1265962, 'Walt Whitman High School', 
+    '<p><b>Walt Whitman High School</b><p><a href="http://www.hudl.com/athlete/3878874/highlights/271634380/v2">Player Name 1</a><br><a href="http://www.hudl.com/athlete/1487608/highlights/170695375/v2">Player Name 2</a>'],
+    [39.0252957, -77.1305395, 'Walter Johnson High School', 
+    '<p><b>Walter Johnson High School</b><p><a href="http://www.hudl.com/athlete/3878874/highlights/271634380/v2">Player Name 1</a><br><a href="http://www.hudl.com/athlete/1487608/highlights/170695375/v2">Player Name 2</a>'],
+    [38.9864928, -77.0885041, 'Bethesda Chevy Chase High School', 
+    '<p><b>Bethesda Chevy Chase High School</b><p><a href="http://www.hudl.com/athlete/3878874/highlights/271634380/v2">Player Name 1</a><br><a href="http://www.hudl.com/athlete/1487608/highlights/170695375/v2">Player Name 2</a>']]
+    
+    marks.forEach( function(mark){
+      make_marker(mark[0], mark[1], mark[2],mark[3]);
+    });
+
 	}
+
+
+  function make_marker(lat, lng, title, message){
+        var image = {
+    url:'hudl_logo_small.png',
+    size: new google.maps.Size(30,30),
+    }
+    var Latlng = {lat: lat, lng: lng};
+    var marker = new google.maps.Marker({
+    position: Latlng,
+    map: map,
+    title: title,
+    icon: image
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: message
+      });
+      marker.addListener('click', function() {
+                markers.forEach(function(entry){
+          entry[1].close();
+        });
+        infowindow.open(marker.get('map'), marker);
+
+      });
+      markers.push([marker, infowindow]);
+  }
+
 
 	function initMap() {
 	  map = new google.maps.Map(document.getElementById('map'), {
