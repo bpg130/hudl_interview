@@ -10,3 +10,8 @@ html, body {
 a {
 	color:red;
 }
+
+#title {
+
+	text-align: center;
+}

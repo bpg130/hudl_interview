@@ -8,12 +8,28 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   </head>
   <body>
+    <div id="title"><p>hey</p></div>
     <div id="map"></div>
     <script>
 	var map;
 	var markers = [];
 	
+  function getData(){
 
+    $("#title").html("<p>Who's Nearby?</p>");
+    var data = "";
+    var url = "http://localhost/hudl_interview/getSchools.php";
+    $.ajax({
+      dataType: "json",
+      url: url,
+      data: data,
+    }).success(function (data){
+      $("#title").html("<p>SUCCESS</p>");
+    }).fail(function(){
+      $("#title").html("<p>FAILED!</p>");
+    });
+    // initMarkers();
+  }
   function initMarkers(){
 
     var marks = [
@@ -29,6 +45,7 @@
     });
 
 	}
+
 
 
   function make_marker(lat, lng, title, message){
@@ -63,7 +80,8 @@
 	    center: {lat: 38.9805051, lng: -77.1265962},
 	    zoom: 11
 	  });
-	  initMarkers();
+	  getData();
+    
 	}
 
     </script>
