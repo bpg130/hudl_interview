@@ -8,16 +8,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   </head>
   <body>
-    <div id="title"><p>hey</p></div>
+    <div id="header">
+      <div id="image1">
+        <img src="hudl_logo_big.png" height="75px" width="75px">HUDL</div>
+      <div id="title">Who's Nearby?</div>
+    </div>
     <div id="map"></div>
+    <div id="sig">Designed By Ben Page</div>
     <script>
 	var map;
 	var markers = [];
   var marks = [];
 	
   function getData(){
-
-    $("#title").html("<p>Who's Nearby?</p>");
     var data = "";
     var url = "http://localhost/hudl_interview/getSchools.php";
     $.ajax({
@@ -25,7 +28,6 @@
       url: url,
       data: data,
     }).success(function (data){
-      $("#title").html("<p>SUCCESS</p>");
       
       data.forEach(function(school){
         var message = "";
@@ -40,7 +42,7 @@
 
       initMarkers();
     }).fail(function(){
-      $("#title").html("<p>FAILED!</p>");
+      $("#title").html("Error Loading Schools and Players");
     });
   }
   function initMarkers(){
