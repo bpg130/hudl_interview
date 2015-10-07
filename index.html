@@ -31,7 +31,7 @@
         var message = "";
           players = school["players"]
           players.forEach(function(player){
-            message = message + '<a href="'+player["player_link"]+'">' + player["player_name"] + "</a><br>";
+            message = message + '<a href="'+player["player_link"]+'">' + player["player_name"] + ' (' + player["grad_year"] +')</a><br>';
 
           });
           message = '<p><b>' + school["school_name"] + '</b></p>' + message;
