@@ -13,6 +13,7 @@
     <script>
 	var map;
 	var markers = [];
+  var marks = [];
 	
   function getData(){
 
@@ -25,20 +26,24 @@
       data: data,
     }).success(function (data){
       $("#title").html("<p>SUCCESS</p>");
+      
+      data.forEach(function(school){
+        var message = "";
+          players = school["players"]
+          players.forEach(function(player){
+            message = message + '<a href="'+player["player_link"]+'">' + player["player_name"] + "</a><br>";
+
+          });
+          message = '<p><b>' + school["school_name"] + '</b></p>' + message;
+          marks.push([school["lat"], school["lng"], school["school_name"], message]);
+      });
+
+      initMarkers();
     }).fail(function(){
       $("#title").html("<p>FAILED!</p>");
     });
-    // initMarkers();
   }
   function initMarkers(){
-
-    var marks = [
-    [38.9805051, -77.1265962, 'Walt Whitman High School', 
-    '<p><b>Walt Whitman High School</b><p><a href="http://www.hudl.com/athlete/3878874/highlights/271634380/v2">Player Name 1</a><br><a href="http://www.hudl.com/athlete/1487608/highlights/170695375/v2">Player Name 2</a>'],
-    [39.0252957, -77.1305395, 'Walter Johnson High School', 
-    '<p><b>Walter Johnson High School</b><p><a href="http://www.hudl.com/athlete/3878874/highlights/271634380/v2">Player Name 1</a><br><a href="http://www.hudl.com/athlete/1487608/highlights/170695375/v2">Player Name 2</a>'],
-    [38.9864928, -77.0885041, 'Bethesda Chevy Chase High School', 
-    '<p><b>Bethesda Chevy Chase High School</b><p><a href="http://www.hudl.com/athlete/3878874/highlights/271634380/v2">Player Name 1</a><br><a href="http://www.hudl.com/athlete/1487608/highlights/170695375/v2">Player Name 2</a>']]
     
     marks.forEach( function(mark){
       make_marker(mark[0], mark[1], mark[2],mark[3]);
@@ -46,14 +51,12 @@
 
 	}
 
-
-
   function make_marker(lat, lng, title, message){
         var image = {
     url:'hudl_logo_small.png',
     size: new google.maps.Size(30,30),
     }
-    var Latlng = {lat: lat, lng: lng};
+    var Latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
     var marker = new google.maps.Marker({
     position: Latlng,
     map: map,
