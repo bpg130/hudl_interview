@@ -16,10 +16,12 @@
     <div id="map"></div>
     <div id="sig">Designed By Ben Page</div>
     <script>
-	var map;
+	//variables to hold the map and markers on the map
+  var map;
 	var markers = [];
   var marks = [];
 	
+  //uses a json ajax call to retrieve the school and player information from the database
   function getData(){
     var data = "";
     var url = "http://localhost/hudl_interview/getSchools.php";
@@ -29,36 +31,51 @@
       data: data,
     }).success(function (data){
       
+        initMarkers(data);
+      });
+
+      initMarkers();
+    }).fail(function(){
+      //let the user know that we were unable to load the info
+      $("#title").html("Error Loading Schools and Players");
+    });
+  }
+
+  function initMarkers(data){
+
+          //create a school marker for each school we retrieved
       data.forEach(function(school){
         var message = "";
           players = school["players"]
+
+          //adds another line to the school marker for each athlete with that school
           players.forEach(function(player){
             message = message + '<a href="'+player["player_link"]+'">' + player["player_name"] + ' (' + player["grad_year"] +')</a><br>';
 
           });
           message = '<p><b>' + school["school_name"] + '</b></p>' + message;
+          
+          //add the marker to the array
           marks.push([school["lat"], school["lng"], school["school_name"], message]);
-      });
 
-      initMarkers();
-    }).fail(function(){
-      $("#title").html("Error Loading Schools and Players");
+   
     });
-  }
-  function initMarkers(){
 
-    
-    marks.forEach( function(mark){
+      //add each school to the map 
+      marks.forEach( function(mark){
       make_marker(mark[0], mark[1], mark[2],mark[3]);
-    });
 
 	}
 
+  //uses the google maps APIs to create a marker that goes on the map
   function make_marker(lat, lng, title, message){
-        var image = {
+    
+    //use the hudl logo as the marker image    
+    var image = {
     url:'hudl_logo_small.png',
     size: new google.maps.Size(30,30),
     }
+
     var Latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
     var marker = new google.maps.Marker({
     position: Latlng,
@@ -67,16 +84,19 @@
     icon: image
     });
 
+    //create and populate the info window with the athletes info
     var infowindow = new google.maps.InfoWindow({
         content: message
       });
       marker.addListener('click', function() {
-                markers.forEach(function(entry){
+        //only allow one markers info box to be open at a time
+        markers.forEach(function(entry){
           entry[1].close();
         });
         infowindow.open(marker.get('map'), marker);
 
       });
+      //add the marker and info window to our array for later use
       markers.push([marker, infowindow]);
   }
 
@@ -86,8 +106,7 @@
 	    center: {lat: 38.9805051, lng: -77.1265962},
 	    zoom: 11
 	  });
-	  getData();
-    
+	  getData(); 
 	}
 
     </script>
