@@ -7,6 +7,7 @@ if ($mysqli->connect_errno) {
 }
 else { 
 
+	//select each school from the database
 	$res = $mysqli->query("Select * from schools");
 	$data = array();
 	while( $row = $res->fetch_assoc()){
@@ -16,6 +17,7 @@ else {
 		$data[] = ["school_name"=> $row["school_name"], "lat"=>$row["lat"], "lng"=>$row["lng"]];
 
 	}
+	//foreach school in school get all of there athletes 
 	foreach ($data as &$school){
 		$res = $mysqli->query("select * from players where school_name = '" . $school["school_name"]."'");
 		$players = array();
